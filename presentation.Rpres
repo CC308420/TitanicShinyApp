@@ -1,0 +1,48 @@
+Survival of passengers on the Titanic
+========================================================
+date: 1 Oct 2020
+autosize: true
+transition: zoom
+
+Intro
+========================================================
+
+This shiny app allow you to predict the chance of survival of passengers on the Titanic.
+
+![](Titanic/www/Titanic.jpg)
+
+Data
+========================================================
+
+This shiny app use the dataset from library [effects](https://www.rdocumentation.org/packages/effects/versions/2.2-4/topics/Titanic) 
+
+```{r, include=FALSE}
+library(effects)
+TitanicSurvival <- TitanicSurvival[!is.na(TitanicSurvival$age),]
+TitanicSurvival$survived <- as.numeric(TitanicSurvival$survived) - 1
+```
+
+```{r, echo=TRUE}
+head(TitanicSurvival)
+```
+
+How to Use this App
+========================================================
+
+Input the following **Passenger Info** and the predicted result will update automatically.
+
+ - Passenger Class
+ - Gender
+ - Age
+ 
+Moreover, you can check out the brief **history** of the Titanic as well as the **figure** of the Survival of passengers on the Titanic.
+
+How it works
+========================================================
+This shiny app use the parameters (Passenger Class, Gender, Age) to predict the chance of survival of passengers on the Titanic. The model is fitted by **linear regression**.
+```{r, eval=FALSE}
+model <- lm(survived ~ ., data=TitanicSurvival)
+pred <- predict(model, newdata=data.frame(sex=input$inSex, age=input$inAge, passengerClass=input$inClass))
+max(min(round(pred * 100, digits=2), 100), 0)
+```
+
